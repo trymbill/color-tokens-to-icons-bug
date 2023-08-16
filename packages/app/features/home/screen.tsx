@@ -1,97 +1,37 @@
-import {
-  Anchor,
-  Button,
-  H1,
-  Paragraph,
-  Separator,
-  Sheet,
-  useToastController,
-  XStack,
-  YStack,
-} from '@my/ui'
-import { ChevronDown, ChevronUp } from '@tamagui/lucide-icons'
-import React, { useState } from 'react'
-import { useLink } from 'solito/link'
+import { Button, Paragraph, YStack } from '@my/ui'
+import { AlarmCheck } from '@tamagui/lucide-icons'
+import { LinearGradient } from 'tamagui/linear-gradient'
+import React from 'react'
 
 export function HomeScreen() {
-  const linkProps = useLink({
-    href: '/user/nate',
-  })
-
   return (
     <YStack f={1} jc="center" ai="center" p="$4" space>
-      <YStack space="$4" maw={600}>
-        <H1 ta="center">Welcome to Tamagui.</H1>
-        <Paragraph ta="center">
-          Here's a basic starter to show navigating from one screen to another. This screen uses the
-          same code on Next.js and React Native.
-        </Paragraph>
+      <YStack space="$4" maw={600} alignItems="center">
+        <Button icon={AlarmCheck} color="$primary">
+          This button wont show an icon
+        </Button>
 
-        <Separator />
+        <Paragraph ta="center">Regluar color values work fine:</Paragraph>
+        <LinearGradient colors={['white', 'black']} start={[0, 0]} end={[1, 1]} h={40} w={300} />
+
+        <Paragraph ta="center">But custom color tokens don't:</Paragraph>
+        <LinearGradient colors={['$white', '$black']} start={[0, 0]} end={[1, 1]} h={40} w={300} />
+
+        <Paragraph ta="center">These use 'red' from tamagui/colors and work fine:</Paragraph>
+        <LinearGradient colors={['$red4', '$red10']} start={[0, 0]} end={[1, 1]} h={40} w={300} />
+
         <Paragraph ta="center">
-          Made by{' '}
-          <Anchor color="$color12" href="https://twitter.com/natebirdman" target="_blank">
-            @natebirdman
-          </Anchor>
-          ,{' '}
-          <Anchor
-            color="$color12"
-            href="https://github.com/tamagui/tamagui"
-            target="_blank"
-            rel="noreferrer"
-          >
-            give it a ⭐️
-          </Anchor>
+          But these use the same color values as 'green' from tamagui/colors, but have a different
+          name:
         </Paragraph>
+        <LinearGradient
+          colors={['$somethingotherthangreen4', '$somethingotherthangreen10']}
+          start={[0, 0]}
+          end={[1, 1]}
+          h={40}
+          w={300}
+        />
       </YStack>
-
-      <XStack>
-        <Button {...linkProps}>Link to user</Button>
-      </XStack>
-
-      <SheetDemo />
     </YStack>
-  )
-}
-
-function SheetDemo() {
-  const [open, setOpen] = useState(false)
-  const [position, setPosition] = useState(0)
-  const toast = useToastController()
-
-  return (
-    <>
-      <Button
-        size="$6"
-        icon={open ? ChevronDown : ChevronUp}
-        circular
-        onPress={() => setOpen((x) => !x)}
-      />
-      <Sheet
-        modal
-        open={open}
-        onOpenChange={setOpen}
-        snapPoints={[80]}
-        position={position}
-        onPositionChange={setPosition}
-        dismissOnSnapToBottom
-      >
-        <Sheet.Overlay animation="lazy" enterStyle={{ opacity: 0 }} exitStyle={{ opacity: 0 }} />
-        <Sheet.Frame ai="center" jc="center">
-          <Sheet.Handle />
-          <Button
-            size="$6"
-            circular
-            icon={ChevronDown}
-            onPress={() => {
-              setOpen(false)
-              toast.show('Sheet closed!', {
-                message: 'Just showing how toast works...',
-              })
-            }}
-          />
-        </Sheet.Frame>
-      </Sheet>
-    </>
   )
 }
